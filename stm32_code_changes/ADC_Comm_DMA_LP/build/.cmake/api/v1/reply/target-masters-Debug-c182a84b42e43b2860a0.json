@@ -1,0 +1,262 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "masters.exe"
+		},
+		{
+			"path" : "masters.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"add_compile_definitions",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 18,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 6,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 10,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 2,
+					"define" : "ARM_ALL_FFT_TABLES"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "STM32L4R7xx"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "USE_HAL_DRIVER"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "WINDOWS_TESTING"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Inc"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/STM32L4xx_HAL_Driver/Inc"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/Include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/Device/ST/STM32L4xx/Include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Middlewares/Third_Party/FatFs/src"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13
+			]
+		}
+	],
+	"id" : "masters::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C"
+	},
+	"name" : "masters",
+	"nameOnDisk" : "masters.exe",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/main.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/optics.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/scheduler.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/CommonTables/arm_const_structs.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/CommonTables/arm_common_tables.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/TransformFunctions/arm_bitreversal2.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_radix8_f32.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/TransformFunctions/arm_rfft_fast_init_f32.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_init_f32.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_f32.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/TransformFunctions/arm_rfft_fast_f32.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/ComplexMathFunctions/arm_cmplx_mag_f32.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/BasicMathFunctions/arm_mult_f32.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/CMSIS/DSP/Source/BasicMathFunctions/arm_scale_f32.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

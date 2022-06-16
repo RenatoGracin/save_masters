@@ -1,0 +1,24 @@
+{
+    "files.associations": {
+        "optics.h": "c",
+        "arm_math.h": "c",
+        "fatfs.h": "c",
+        "main.h": "c",
+        "scheduler.h": "c",
+        "stm32l4xx_hal.h": "c",
+        "stm32_hal_legacy.h": "c",
+        "stm32l4xx.h": "c",
+        "stm32l4xx_hal_conf.h": "c",
+        "ff.h": "c",
+        "stm32l4xx_hal_def.h": "c",
+        "setup.h": "c",
+        "sd_diskio.h": "c",
+        "ff_gen_drv.h": "c",
+        "ffconf.h": "c",
+        "bsp_driver_sd.h": "c",
+        "arm_const_structs.h": "c",
+        "stdint.h": "c",
+        "stdio.h": "c",
+        "math.h": "c"
+    }
+}

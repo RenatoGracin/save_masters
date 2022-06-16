@@ -1,0 +1,12 @@
+uae_config_spi_v01\optics.o: ..\Src\optics.c
+uae_config_spi_v01\optics.o: ../Inc/optics.h
+uae_config_spi_v01\optics.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+uae_config_spi_v01\optics.o: ../Drivers/CMSIS/Include/arm_math.h
+uae_config_spi_v01\optics.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
+uae_config_spi_v01\optics.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+uae_config_spi_v01\optics.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
+uae_config_spi_v01\optics.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+uae_config_spi_v01\optics.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\float.h
+uae_config_spi_v01\optics.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
+uae_config_spi_v01\optics.o: ../Drivers/CMSIS/Include/arm_const_structs.h
+uae_config_spi_v01\optics.o: ../Drivers/CMSIS/Include/arm_common_tables.h

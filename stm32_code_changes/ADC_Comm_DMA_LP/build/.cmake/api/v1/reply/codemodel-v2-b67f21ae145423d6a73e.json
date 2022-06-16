@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "masters",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "masters::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-masters-Debug-c182a84b42e43b2860a0.json",
+					"name" : "masters",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+		"source" : "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

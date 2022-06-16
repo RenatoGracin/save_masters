@@ -1,0 +1,72 @@
+[
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Src/main.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Src/main.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Src/main.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Src/optics.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Src/optics.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Src/optics.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Src/scheduler.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Src/scheduler.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Src/scheduler.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/CommonTables/arm_const_structs.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/CommonTables/arm_const_structs.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/CommonTables/arm_const_structs.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/CommonTables/arm_common_tables.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/CommonTables/arm_common_tables.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/CommonTables/arm_common_tables.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_bitreversal2.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_bitreversal2.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_bitreversal2.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_radix8_f32.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_radix8_f32.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_radix8_f32.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_rfft_fast_init_f32.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_rfft_fast_init_f32.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_rfft_fast_init_f32.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_init_f32.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_init_f32.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_init_f32.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_f32.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_f32.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_cfft_f32.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_rfft_fast_f32.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_rfft_fast_f32.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/TransformFunctions/arm_rfft_fast_f32.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/ComplexMathFunctions/arm_cmplx_mag_f32.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/ComplexMathFunctions/arm_cmplx_mag_f32.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/ComplexMathFunctions/arm_cmplx_mag_f32.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/BasicMathFunctions/arm_mult_f32.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/BasicMathFunctions/arm_mult_f32.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/BasicMathFunctions/arm_mult_f32.c"
+},
+{
+  "directory": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/build",
+  "command": "C:/MinGW/bin/gcc.exe -DARM_ALL_FFT_TABLES -DSTM32L4R7xx -DUSE_HAL_DRIVER -DWINDOWS_TESTING @CMakeFiles/masters.dir/includes_C.rsp -g -o CMakeFiles/masters.dir/Drivers/CMSIS/DSP/Source/BasicMathFunctions/arm_scale_f32.c.obj -c C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/BasicMathFunctions/arm_scale_f32.c",
+  "file": "C:/Users/bujak/Desktop/FER/5_godina/DIPLOMSKI_PROJEKT/DILPOMSKI_RAD/plant_AE_classification/stm32_code_changes/ADC_Comm_DMA_LP/Drivers/CMSIS/DSP/Source/BasicMathFunctions/arm_scale_f32.c"
+}
+]

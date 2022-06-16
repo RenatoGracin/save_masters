@@ -1,0 +1,750 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+// ADS Commands and address
+// To configure its output as 4 bits bus (default : 1 bit)
+// see section 7.6.1.3 of ADS datasheet
+
+// Instruction
+#define ADS_SDO_WR_INSTR 0x0A
+#define ADS_SDO_RD_INSTR 0x09
+
+// Address
+#define ADS_PD_CNTL 0x010
+#define ADS_SDI_CNTL 0x014
+#define ADS_SDO_CNTL 0x018
+#define ADS_DATA_CNTL 0x01c
+
+#define ADS_SDO_CNTL_VALUE 0x0C
+// Number of consecutive failed I2C communication before calling Error_Handler()
+#define I2C_TIMEOUT 10
+
+// How often will there be temperature and humidity measure ?
+#define SENSIRION_MEASURE_PERIOD 60 // (seconds)
+
+// How often will there be ADC acquisition ? // not used here mode
+#define ADC_MEASURE_FREQUENCY_DIVIDER 2 // freq = 7.5 / (Divider + 1) MHz
+
+// Flags for ITs
+#define FLAG_SET 1
+#define FLAG_RESET 0
+
+// GPIO Pins
+#define ADC_REF_ENABLE HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET)
+#define ADC_REF_DISABLE HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET)
+
+//      When CS is configured as GPIO
+//#define ADC_CSSDO_ACTIVE HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET)
+//#define ADC_CSSDO_IDLE HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET)
+//      When CS is consigured as TIM15 Output
+#define ADC_CSSDO_IDLE htim15.Instance->CCER &= ~(TIM_CCER_CC1P)
+#define ADC_CSSDO_ACTIVE htim15.Instance->CCER |= TIM_CCER_CC1P
+
+
+#define ADC_RESET_ENABLE HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET)
+#define ADC_RESET_DISABLE HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET)
+
+#define ADC_SPI_MUX_SDO0 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET)
+#define ADC_SPI_MUX_SDI HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET)
+
+#define ADS_READY HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+LPTIM_HandleTypeDef hlptim2;
+
+OSPI_HandleTypeDef hospi1;
+
+TIM_HandleTypeDef htim15;
+
+/* USER CODE BEGIN PV */
+/* Private variables ---------------------------------------------------------*/
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_LPTIM2_Init(void);
+static void MX_OCTOSPI1_Init(void);
+static void MX_TIM15_Init(void);
+/* USER CODE BEGIN PFP */
+ /**
+ * OCTOSPI_Init() - To initialise the OSPI peripheral of the MCU 																	
+ *                        You can choose the frequency of the communication            
+ * 												by changing the prescaler value
+ */
+void OCTOSPI_Init(void);
+ /**
+ * ADS_Init() - To initialise the ADC 															
+ *                        The first message is only sent for debug         
+ * 												The second message is sent to set ADC output to 4 pins instead of 1
+ */
+void ADS_Init(void);
+ /**
+ * ADS_Read() - Read the 2 bytes value sent by the ADC, put the result on data 
+ * 
+ * @return     					STATUS_OK on success, an error code otherwise
+ */
+HAL_StatusTypeDef ADS_Read(unsigned char* data);
+/**
+ * sht3x_start_measure() - Send Single Shot data acquisition command, 
+ * 																		check if the command was well received.
+ * 																		if not, try again I2C_TIMEOUT times.																	
+ *                                    
+ * @return     					STATUS_OK on success, an error code otherwise
+ */
+/* Private function prototypes -----------------------------------------------*/
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+  /* USER CODE BEGIN 1 */
+	unsigned char data[8] = {0xaa, 0xaa};
+  /* USER CODE END 1 */
+  
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_LPTIM2_Init();
+  //MX_OCTOSPI1_Init();
+  MX_TIM15_Init();
+  /* USER CODE BEGIN 2 */
+	OCTOSPI_Init();
+	ADS_Init();
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+	
+	HAL_Delay(10);
+	HAL_LPTIM_OnePulse_Start(&hlptim2, ADC_MEASURE_FREQUENCY_DIVIDER, 1); // start a measure of the ADC
+	HAL_Delay(10);
+
+
+  while (1)
+  {		
+		HAL_Delay(10);
+
+		ADS_Read(data);
+		
+		HAL_LPTIM_OnePulse_Start(&hlptim2, ADC_MEASURE_FREQUENCY_DIVIDER, 1); // start a measure of the ADC
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+
+  }
+  /* USER CODE END 3 */
+}
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+
+  /** Configure the main internal regulator output voltage 
+  */
+  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Initializes the CPU, AHB and APB busses clocks 
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLM = 1;
+  RCC_OscInitStruct.PLL.PLLN = 30;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV5;
+  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV6;
+  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Initializes the CPU, AHB and APB busses clocks 
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV16;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV8;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_LPTIM2|RCC_PERIPHCLK_OSPI;
+  PeriphClkInit.Lptim2ClockSelection = RCC_LPTIM2CLKSOURCE_PCLK;
+  PeriphClkInit.OspiClockSelection = RCC_OSPICLKSOURCE_PLL;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief LPTIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_LPTIM2_Init(void)
+{
+
+  /* USER CODE BEGIN LPTIM2_Init 0 */
+
+  /* USER CODE END LPTIM2_Init 0 */
+
+  /* USER CODE BEGIN LPTIM2_Init 1 */
+
+  /* USER CODE END LPTIM2_Init 1 */
+  hlptim2.Instance = LPTIM2;
+  hlptim2.Init.Clock.Source = LPTIM_CLOCKSOURCE_APBCLOCK_LPOSC;
+  hlptim2.Init.Clock.Prescaler = LPTIM_PRESCALER_DIV1;
+  hlptim2.Init.Trigger.Source = LPTIM_TRIGSOURCE_SOFTWARE;
+  hlptim2.Init.OutputPolarity = LPTIM_OUTPUTPOLARITY_HIGH;
+  hlptim2.Init.UpdateMode = LPTIM_UPDATE_ENDOFPERIOD;
+  hlptim2.Init.CounterSource = LPTIM_COUNTERSOURCE_INTERNAL;
+  hlptim2.Init.Input1Source = LPTIM_INPUT1SOURCE_GPIO;
+  hlptim2.Init.Input2Source = LPTIM_INPUT2SOURCE_GPIO;
+  if (HAL_LPTIM_Init(&hlptim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN LPTIM2_Init 2 */
+	//HAL_LPTIM_PWM_Start(&hlptim2, ADC_MEASURE_FREQUENCY_DIVIDER, 1); // Start timer, f = 7.5 / (x+1) MHz
+  /* USER CODE END LPTIM2_Init 2 */
+
+}
+
+/**
+  * @brief OCTOSPI1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_OCTOSPI1_Init(void)
+{
+
+  /* USER CODE BEGIN OCTOSPI1_Init 0 */
+
+  /* USER CODE END OCTOSPI1_Init 0 */
+
+  OSPIM_CfgTypeDef OSPIM_Cfg_Struct = {0};
+  OSPI_AutoPollingTypeDef cfg = {0};
+
+  /* USER CODE BEGIN OCTOSPI1_Init 1 */
+
+  /* USER CODE END OCTOSPI1_Init 1 */
+  /* OCTOSPI1 parameter configuration*/
+  hospi1.Instance = OCTOSPI1;
+  hospi1.Init.FifoThreshold = 1;
+  hospi1.Init.DualQuad = HAL_OSPI_DUALQUAD_ENABLE;
+  hospi1.Init.MemoryType = HAL_OSPI_MEMTYPE_MICRON;
+  hospi1.Init.DeviceSize = 1;
+  hospi1.Init.ChipSelectHighTime = 1;
+  hospi1.Init.FreeRunningClock = HAL_OSPI_FREERUNCLK_DISABLE;
+  hospi1.Init.ClockMode = HAL_OSPI_CLOCK_MODE_0;
+  hospi1.Init.WrapSize = HAL_OSPI_WRAP_NOT_SUPPORTED;
+  hospi1.Init.ClockPrescaler = 256;
+  hospi1.Init.SampleShifting = HAL_OSPI_SAMPLE_SHIFTING_NONE;
+  hospi1.Init.DelayHoldQuarterCycle = HAL_OSPI_DHQC_DISABLE;
+  hospi1.Init.ChipSelectBoundary = 1;
+  if (HAL_OSPI_Init(&hospi1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  OSPIM_Cfg_Struct.ClkPort = 1;
+  OSPIM_Cfg_Struct.IOLowPort = HAL_OSPIM_IOPORT_1_LOW;
+  OSPIM_Cfg_Struct.IOHighPort = HAL_OSPIM_IOPORT_1_HIGH;
+
+  if (HAL_OSPIM_Config(&hospi1, &OSPIM_Cfg_Struct, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  cfg.Match = 0;
+  cfg.Mask = 0;
+  cfg.MatchMode = HAL_OSPI_MATCH_MODE_AND;
+  cfg.AutomaticStop = HAL_OSPI_AUTOMATIC_STOP_DISABLE;
+  cfg.Interval = 0;
+  if (HAL_OSPI_AutoPolling(&hospi1, &cfg, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_OSPI_AutoPolling_IT(&hospi1, &cfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN OCTOSPI1_Init 2 */
+
+  /* USER CODE END OCTOSPI1_Init 2 */
+
+}
+
+/**
+  * @brief TIM15 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM15_Init(void)
+{
+
+  /* USER CODE BEGIN TIM15_Init 0 */
+
+  /* USER CODE END TIM15_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+
+  /* USER CODE BEGIN TIM15_Init 1 */
+
+  /* USER CODE END TIM15_Init 1 */
+  htim15.Instance = TIM15;
+  htim15.Init.Prescaler = 1;
+  htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim15.Init.Period = 60;
+  htim15.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim15.Init.RepetitionCounter = 0;
+  htim15.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim15) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim15, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim15) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OnePulse_Init(&htim15, TIM_OPMODE_SINGLE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim15, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 17;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+  if (HAL_TIM_PWM_ConfigChannel(&htim15, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+  if (HAL_TIMEx_ConfigBreakDeadTime(&htim15, &sBreakDeadTimeConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM15_Init 2 */
+	HAL_TIM_OnePulse_Start(&htim15, TIM_CHANNEL_1);
+  /* USER CODE END TIM15_Init 2 */
+  HAL_TIM_MspPostInit(&htim15);
+
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOE_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2|GPIO_PIN_3, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8|GPIO_PIN_9, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : PE2 PE3 PE4 PE5 
+                           PE6 PE7 PE10 PE11 
+                           PE12 PE13 PE14 PE15 
+                           PE0 PE1 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5 
+                          |GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_10|GPIO_PIN_11 
+                          |GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15 
+                          |GPIO_PIN_0|GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PC13 PC0 PC5 PC6 
+                           PC7 PC8 PC9 PC10 
+                           PC11 PC12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_0|GPIO_PIN_5|GPIO_PIN_6 
+                          |GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10 
+                          |GPIO_PIN_11|GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PC2 PC3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA1 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB2 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PE8 PE9 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB10 PB11 PB12 PB13 
+                           PB14 PB15 PB5 PB8 
+                           PB9 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13 
+                          |GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_5|GPIO_PIN_8 
+                          |GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PD8 PD9 PD10 PD11 
+                           PD12 PD13 PD14 PD15 
+                           PD0 PD1 PD2 PD3 
+                           PD4 PD7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11 
+                          |GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15 
+                          |GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 
+                          |GPIO_PIN_4|GPIO_PIN_7;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PA8 PA9 PA10 PA11 
+                           PA12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11 
+                          |GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB6 PB7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PH3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
+
+}
+
+/* USER CODE BEGIN 4 */
+void OCTOSPI_Init(void)
+{
+	OSPIM_CfgTypeDef OSPIM_Cfg_Struct = {0};
+	
+	// see OSPI_HandleTypeDef typedef
+	hospi1.Instance = OCTOSPI1;
+	
+	ADC_CSSDO_IDLE;
+	
+	// see OSPI_InitTypeDef typedef
+  hospi1.Init.FifoThreshold = 1; // !
+	hospi1.Init.DualQuad = HAL_OSPI_DUALQUAD_DISABLE;
+  hospi1.Init.MemoryType = HAL_OSPI_MEMTYPE_MICRON; // default mode
+  hospi1.Init.DeviceSize = 8; // "number of address bits required to access the external device"
+  hospi1.Init.ChipSelectHighTime = 5; // !
+  hospi1.Init.FreeRunningClock = HAL_OSPI_FREERUNCLK_DISABLE;
+  hospi1.Init.ClockMode = HAL_OSPI_CLOCK_MODE_0; // see table 5 of ADS datasheet
+  hospi1.Init.WrapSize = HAL_OSPI_WRAP_NOT_SUPPORTED;
+  hospi1.Init.ClockPrescaler = 1;
+  hospi1.Init.SampleShifting = HAL_OSPI_SAMPLE_SHIFTING_NONE;
+  hospi1.Init.DelayHoldQuarterCycle = HAL_OSPI_DHQC_DISABLE;
+  hospi1.Init.ChipSelectBoundary = 0;
+	
+	HAL_OSPI_MspInit(&hospi1);
+	
+	if (HAL_OSPI_Init(&hospi1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+	
+	OSPIM_Cfg_Struct.ClkPort = 1;
+  OSPIM_Cfg_Struct.IOLowPort = HAL_OSPIM_IOPORT_1_LOW;
+  if (HAL_OSPIM_Config(&hospi1, &OSPIM_Cfg_Struct, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+void ADS_Init(void)
+{
+	//RESET the ADS chip
+	ADC_REF_ENABLE;
+	ADC_RESET_ENABLE;
+	HAL_Delay(1);
+	ADC_RESET_DISABLE;
+	HAL_Delay(50);
+
+	OSPI_RegularCmdTypeDef cmd;
+	unsigned char data;
+	
+	// see OSPI_RegularCmdTypeDef typedef
+	// Configure the ADS to use all 4 bits as SDO outputs
+	cmd.OperationType = HAL_OSPI_OPTYPE_COMMON_CFG;
+	cmd.FlashId = HAL_OSPI_FLASH_ID_1;
+	cmd.Instruction = ADS_SDO_WR_INSTR;
+	cmd.InstructionMode = HAL_OSPI_INSTRUCTION_1_LINE;
+	cmd.InstructionSize = HAL_OSPI_INSTRUCTION_8_BITS;
+	cmd.InstructionDtrMode = HAL_OSPI_INSTRUCTION_DTR_DISABLE;
+
+	cmd.AddressMode = HAL_OSPI_ADDRESS_1_LINE;
+	cmd.AddressSize = HAL_OSPI_ADDRESS_8_BITS;
+	cmd.AddressDtrMode = HAL_OSPI_ADDRESS_DTR_DISABLE;
+	cmd.AlternateBytesMode = HAL_OSPI_ALTERNATE_BYTES_NONE;
+	cmd.DataMode = HAL_OSPI_DATA_1_LINE;
+	cmd.DataDtrMode = HAL_OSPI_DATA_DTR_DISABLE;
+	cmd.NbData = 1;
+	cmd.DummyCycles = 0;
+	cmd.DQSMode = HAL_OSPI_DQS_DISABLE;
+	cmd.SIOOMode = HAL_OSPI_SIOO_INST_EVERY_CMD;
+	
+	ADC_REF_ENABLE;
+	ADC_SPI_MUX_SDI;
+	HAL_Delay(1);
+		
+	// the AD will not send measure results, but known data instead (for debug)
+	cmd.Address = ADS_DATA_CNTL;
+	data = 0x07; //ADC will send 0x3333
+//	data = 0x05; //ADC will send 0xFFFF
+//	data = 0x04; //ADC will send 0x0000
+
+	ADC_CSSDO_ACTIVE; // pulls down the nCS pin
+	HAL_Delay(1);
+	// every OSPI communication programmed in two step : you configure a command, and then you transmit (or receive) data
+	if (HAL_OSPI_Command(&hospi1, &cmd, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	
+	if (HAL_OSPI_Transmit(&hospi1, &data, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	HAL_Delay(1);
+	ADC_CSSDO_IDLE; // pulls up the nCS pin
+	
+	
+	// The ADC will send data through 4 pins instead of 1 by default
+	cmd.Address = ADS_SDO_CNTL;
+	data = ADS_SDO_CNTL_VALUE;
+	
+	if (HAL_OSPI_Command(&hospi1, &cmd, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	ADC_CSSDO_ACTIVE;
+	HAL_Delay(1);
+	if (HAL_OSPI_Transmit(&hospi1, &data, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	HAL_Delay(1);
+	ADC_CSSDO_IDLE;
+	
+	HAL_Delay(10);
+	ADC_SPI_MUX_SDO0;
+}
+
+HAL_StatusTypeDef ADS_Read(unsigned char* data)
+{
+	OSPI_RegularCmdTypeDef cmd;
+	HAL_StatusTypeDef ret;
+	
+	cmd.OperationType = HAL_OSPI_OPTYPE_COMMON_CFG;
+	cmd.FlashId = HAL_OSPI_FLASH_ID_1; 
+	cmd.InstructionMode = HAL_OSPI_INSTRUCTION_NONE;
+	
+	cmd.AddressMode = HAL_OSPI_ADDRESS_NONE;
+
+	cmd.AlternateBytesMode = HAL_OSPI_ALTERNATE_BYTES_NONE;
+	
+	cmd.DataMode = HAL_OSPI_DATA_4_LINES;
+	cmd.DataDtrMode = HAL_OSPI_DATA_DTR_DISABLE;
+	cmd.NbData = 2;
+	
+	cmd.DummyCycles = 2;
+
+	cmd.DQSMode = HAL_OSPI_DQS_DISABLE;
+	cmd.SIOOMode = HAL_OSPI_SIOO_INST_EVERY_CMD;
+	
+	ret = HAL_OSPI_Command(&hospi1, &cmd, HAL_OSPI_TIMEOUT_DEFAULT_VALUE);
+	
+	HAL_TIM_Base_Start(&htim15); 	// start the timer, it will pulls nCS down after a fixed time
+																// it should be just after the second rising edge of SCLK
+	
+	if (ret == HAL_OK)
+	{
+		ret = HAL_OSPI_Receive(&hospi1, data, HAL_OSPI_TIMEOUT_DEFAULT_VALUE);
+	}
+	else
+	{
+		Error_Handler();
+	}
+	return ret;
+}
+/* USER CODE END 4 */
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  while(1)
+  {
+		HAL_Delay(500);
+		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_9);
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(char *file, uint32_t line)
+{ 
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
