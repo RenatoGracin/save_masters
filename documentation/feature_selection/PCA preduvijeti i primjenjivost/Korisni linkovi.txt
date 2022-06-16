@@ -1,0 +1,1 @@
+Gdje ne koristiti PCA - https://towardsdatascience.com/pca-is-not-feature-selection-3344fb764ae6
